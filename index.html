@@ -856,7 +856,7 @@
   </div>
 
   <script>
-    const HARDCODED_CLOUD_URL = "https://script.google.com/macros/s/AKfycbwJOVtZ6IqVwO9wddKt_EIaakiD0mt7u7DjOK7LoDBLPx6bbDwEaQBoyCiqYxtMnAbVbg/exec";
+    const HARDCODED_CLOUD_URL = "https://script.google.com/macros/s/AKfycbz9oXxa5sn1outQspTrd8d8kEA6osfZh5Skz4H5kaZKOnAz3cueSDxWcK1FYU_4Ug/exec";
     localStorage.setItem('salaya_cloud_api', HARDCODED_CLOUD_URL);
     const DEFAULT_CLOUD_ENDPOINT = HARDCODED_CLOUD_URL;
 
@@ -865,6 +865,7 @@
 
     let globalRecords = [];
     let isSubmitting = false;
+    let isSyncingQueue = false; // ตัวควบคุม Sequential Queue
     let editingRecordId = null;
     let currentEvaluation = null;
 
@@ -912,7 +913,7 @@
 
     window.addEventListener('online', () => {
       updateCloudIndicator(true, "เน็ตเชื่อมต่อแล้ว กำลังซิงค์ข้อมูล...");
-      syncOfflineQueue();
+      processSyncQueue();
     });
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -979,7 +980,7 @@
         containerDementia.appendChild(div);
       });
 
-      // Render ADL (Default: เลือกตัวเลือกแรก คือทำได้เอง/คะแนนเต็ม)
+      // Render ADL (Default: ทำได้เอง/คะแนนเต็ม)
       const containerADL = document.getElementById('container-adl-questions');
       questionsADL.forEach((q, idx) => {
         const div = document.createElement('div');
@@ -1006,7 +1007,7 @@
       });
 
       fetchCloudData();
-      syncOfflineQueue();
+      processSyncQueue();
     });
 
     function authenticateAdmin() {
@@ -1269,21 +1270,20 @@
           isInanitionAbnormal, isUrineAbnormal, isInsomniaAbnormal,
           isVisionAbnormal, raw_vision, isHearingAbnormal,
           isIsolationAbnormal, sarcopeniaVal, sarcopeniaText,
-          adlTotal, adlGroup, raw_adl,
-          synced: false
+          adlTotal, adlGroup, raw_adl
         };
 
-        // ปลดล็อกสถานะปุ่มทันที
+        // 1. ปลดล็อกปุ่มและสถานะทันที (ผู้ใช้ไม่ต้องรอ)
         isSubmitting = false;
         submitBtn.disabled = false;
         submitText.textContent = "ประมวลผล & บันทึกข้อมูล";
 
-        // แสดงผลสรุปและเปลี่ยนหน้าทันที
+        // 2. แสดงผลสรุปและเปลี่ยนหน้าจอทันที (0.1 วินาที)
         displaySummary(currentEvaluation);
         switchView('summary-view');
 
-        // ส่งข้อมูลขึ้น Cloud เบื้องหลัง
-        saveToCloud(currentEvaluation, isUpdate ? "UPDATE" : "CREATE");
+        // 3. ปล่อยให้ระบบส่งข้อมูลเข้าคิวทำงานเบื้องหลัง
+        enqueueCloudSave(currentEvaluation, isUpdate ? "UPDATE" : "CREATE");
 
       } catch (err) {
         console.error(err);
@@ -1293,67 +1293,64 @@
       }
     }
 
-    async function saveToCloud(record, action = "CREATE") {
+    // ระบบคิวบันทึกข้อมูลเบื้องหลัง (Sequential Task Queue)
+    function enqueueCloudSave(record, action = "CREATE") {
       let local = JSON.parse(localStorage.getItem('salaya_records') || '[]');
-      if (action === "UPDATE") {
-        local = local.map(r => r.id === record.id ? record : r);
+      const existingIndex = local.findIndex(r => r.id === record.id);
+      const recordToSave = { ...record, synced: false, action: action };
+
+      if (existingIndex >= 0) {
+        local[existingIndex] = recordToSave;
       } else {
-        local.unshift(record);
+        local.unshift(recordToSave);
       }
       localStorage.setItem('salaya_records', JSON.stringify(local));
 
-      const apiUrl = localStorage.getItem('salaya_cloud_api') || DEFAULT_CLOUD_ENDPOINT;
-      if (apiUrl) {
-        try {
-          updateCloudIndicator(true, "กำลังส่งข้อมูล...");
-          await fetch(apiUrl, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: action, ...record })
-          });
-          
-          record.synced = true;
-          local = local.map(r => r.id === record.id ? { ...r, synced: true } : r);
-          localStorage.setItem('salaya_records', JSON.stringify(local));
-
-          updateCloudIndicator(true, "บันทึกข้อมูลเรียบร้อย");
-        } catch (e) {
-          console.warn("Cloud push error (Offline):", e);
-          updateCloudIndicator(false, "บันทึกในเครื่องแล้ว (รอเชื่อมต่อ Cloud)");
-        }
-      }
+      processSyncQueue();
     }
 
-    async function syncOfflineQueue() {
-      let local = JSON.parse(localStorage.getItem('salaya_records') || '[]');
-      const pendingItems = local.filter(r => r.synced === false);
-
-      if (pendingItems.length === 0) return;
+    async function processSyncQueue() {
+      if (isSyncingQueue) return;
+      isSyncingQueue = true;
 
       const apiUrl = localStorage.getItem('salaya_cloud_api') || DEFAULT_CLOUD_ENDPOINT;
-      if (!apiUrl) return;
+      if (!apiUrl) {
+        isSyncingQueue = false;
+        return;
+      }
 
-      updateCloudIndicator(true, `กำลังซิงค์ค้างส่ง (${pendingItems.length} รายการ)...`);
+      let local = JSON.parse(localStorage.getItem('salaya_records') || '[]');
+      let pendingItems = local.filter(r => r.synced === false);
 
-      for (const item of pendingItems) {
+      while (pendingItems.length > 0) {
+        const currentItem = pendingItems[0];
+        updateCloudIndicator(true, `กำลังส่งข้อมูล (${pendingItems.length} รายการ)...`);
+
         try {
           await fetch(apiUrl, {
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "UPDATE", ...item })
+            body: JSON.stringify({ action: currentItem.action || "CREATE", ...currentItem })
           });
-          item.synced = true;
+
+          // อัปเดตสถานะว่าซิงค์เสร็จแล้ว
+          local = JSON.parse(localStorage.getItem('salaya_records') || '[]');
+          local = local.map(r => r.id === currentItem.id ? { ...r, synced: true } : r);
+          localStorage.setItem('salaya_records', JSON.stringify(local));
+
         } catch (e) {
-          console.warn("Sync queue failed:", e);
+          console.warn("Queue sync paused (Network issue):", e);
+          updateCloudIndicator(false, "บันทึกในเครื่องแล้ว (รอสัญญาณเน็ต)");
           break;
         }
+
+        local = JSON.parse(localStorage.getItem('salaya_records') || '[]');
+        pendingItems = local.filter(r => r.synced === false);
       }
 
-      localStorage.setItem('salaya_records', JSON.stringify(local));
-      updateCloudIndicator(true, "ซิงค์ข้อมูลสมบูรณ์แล้ว");
-      fetchCloudData();
+      updateCloudIndicator(true, "บันทึกข้อมูลเรียบร้อย");
+      isSyncingQueue = false;
     }
 
     async function fetchCloudData() {
