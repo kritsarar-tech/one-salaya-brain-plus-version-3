@@ -277,7 +277,7 @@
       font-weight: 500;
       color: #475569;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.2s ease;
       min-height: 42px;
     }
     .option-pill input[type="radio"]:checked + label {
@@ -506,7 +506,7 @@
         </div>
 
         <div class="alert-box alert-info">
-          <div>💡 <strong>คำชี้แจง:</strong> ให้ทำแบบคัดกรอง 2 คำถาม (2Q) ก่อน หากตอบ "มี" ข้อใดข้อหนึ่ง ระบบจะเปิด 9Q ให้ประเมินต่อทันที</div>
+          <div>💡 <strong>คำชี้แจง:</strong> ค่าเริ่มต้นถูกตั้งเป็น "ไม่มี" หากพบความเสี่ยงให้ติ๊ก "มี" ระบบจะเปิด 9Q ให้ประเมินต่อทันที</div>
         </div>
 
         <div class="question-item" id="qitem_2q_1">
@@ -517,7 +517,7 @@
               <label for="q2_1_yes">มี</label>
             </div>
             <div class="option-pill">
-              <input type="radio" name="q2_1" id="q2_1_no" value="0" onchange="handle2QChange()">
+              <input type="radio" name="q2_1" id="q2_1_no" value="0" onchange="handle2QChange()" checked>
               <label for="q2_1_no">ไม่มี</label>
             </div>
           </div>
@@ -531,7 +531,7 @@
               <label for="q2_2_yes">มี</label>
             </div>
             <div class="option-pill">
-              <input type="radio" name="q2_2" id="q2_2_no" value="0" onchange="handle2QChange()">
+              <input type="radio" name="q2_2" id="q2_2_no" value="0" onchange="handle2QChange()" checked>
               <label for="q2_2_no">ไม่มี</label>
             </div>
           </div>
@@ -539,7 +539,7 @@
 
         <div id="section-9q" style="display: none; margin-top: 20px; border-top: 2px dashed #fca5a5; padding-top: 16px;">
           <div class="alert-box alert-warning">
-            ⚠️ <strong>ผล 2Q พบความเสี่ยง:</strong> กรุณาตอบแบบประเมิน 9Q ให้ครบทุกข้อ
+            ⚠️ <strong>ผล 2Q พบความเสี่ยง:</strong> กรุณาประเมินระดับอาการ 9Q ต่อไปนี้
           </div>
           <div id="container-9q-questions"></div>
         </div>
@@ -558,7 +558,7 @@
         <div class="alert-box alert-info">
           <div>
             <strong>เกณฑ์การให้คะแนน:</strong> 1 = ไม่เคย/นานๆ ครั้ง | 2 = 1-2 ครั้ง/เดือน | 3 = เกือบทุกสัปดาห์ | 4 = เกือบทุกวัน<br>
-            <em>(คะแนนรวม > 30 คะแนน = มีความเสี่ยง ควรปรึกษาแพทย์)</em>
+            <em>(ตั้งค่าเริ่มต้นเป็น "ไม่เคย/นานๆ ครั้ง (1)" ไว้ล่วงหน้าแล้ว ปรับเฉพาะข้อที่ผิดปกติ)</em>
           </div>
         </div>
 
@@ -577,7 +577,7 @@
 
         <div class="question-item">
           <div class="question-title">1. การทรงตัวและการหกล้ม (Instability)</div>
-          <p class="question-sub">ตอบ "ใช่" ข้อใดข้อหนึ่ง ถือว่ามีความเสี่ยง (หากไม่มีให้เว้นว่างไว้)</p>
+          <p class="question-sub">ตอบ "ใช่" ข้อใดข้อหนึ่ง ถือว่ามีความเสี่ยง (หากทรงตัวได้ดี ไม่ต้องติ๊ก)</p>
           <div style="display:flex; flex-direction:column; gap:8px;">
             <label style="display:flex; align-items:center; gap:8px; font-size:13.5px;">
               <input type="checkbox" id="instability_1" style="width:18px; height:18px;"> มีประวัติหกล้มใน 1 ปีที่ผ่านมา
@@ -600,7 +600,7 @@
               <label for="ina_yes">ผิดปกติ (น้ำหนักลด / เบื่ออาหาร)</label>
             </div>
             <div class="option-pill">
-              <input type="radio" name="gs_inanition" id="ina_no" value="0">
+              <input type="radio" name="gs_inanition" id="ina_no" value="0" checked>
               <label for="ina_no">ปกติ</label>
             </div>
           </div>
@@ -615,7 +615,7 @@
               <label for="uri_yes">ผิดปกติ (มีปัสสาวะเล็ด)</label>
             </div>
             <div class="option-pill">
-              <input type="radio" name="gs_urine" id="uri_no" value="0">
+              <input type="radio" name="gs_urine" id="uri_no" value="0" checked>
               <label for="uri_no">ปกติ</label>
             </div>
           </div>
@@ -630,7 +630,7 @@
               <label for="sleep_yes">ผิดปกติ</label>
             </div>
             <div class="option-pill">
-              <input type="radio" name="gs_sleep" id="sleep_no" value="0">
+              <input type="radio" name="gs_sleep" id="sleep_no" value="0" checked>
               <label for="sleep_no">ปกติ</label>
             </div>
           </div>
@@ -638,7 +638,7 @@
 
         <div class="question-item" id="qitem_gs_sensory">
           <div class="question-title">5. การรับความรู้สึก (Impair Sensory)</div>
-          <p class="question-sub"><strong>5.1 สายตาและการมองเห็น:</strong> (ติ๊กหากมีอาการ)</p>
+          <p class="question-sub"><strong>5.1 สายตาและการมองเห็น:</strong> (ติ๊กหากมีอาการ/หากปกติไม่ต้องติ๊ก)</p>
           <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
             <label style="display:flex; align-items:center; gap:8px; font-size:13.5px;">
               <input type="checkbox" id="sensory_vision_1" style="width:18px; height:18px;"> มีปัญหาการมองเห็น (มองใกล้/ไกลลำบาก)
@@ -658,7 +658,7 @@
               <label for="hear_abnormal">ผิดปกติ (ไม่ได้ยินข้างใดข้างหนึ่ง)</label>
             </div>
             <div class="option-pill">
-              <input type="radio" name="sensory_hearing" id="hear_normal" value="0">
+              <input type="radio" name="sensory_hearing" id="hear_normal" value="0" checked>
               <label for="hear_normal">ปกติ (ได้ยินชัดทั้งสองข้าง)</label>
             </div>
           </div>
@@ -673,7 +673,7 @@
               <label for="iso_yes">ผิดปกติ (อยู่คนเดียว/เหงาบ่อย)</label>
             </div>
             <div class="option-pill">
-              <input type="radio" name="gs_isolation" id="iso_no" value="0">
+              <input type="radio" name="gs_isolation" id="iso_no" value="0" checked>
               <label for="iso_no">ปกติ</label>
             </div>
           </div>
@@ -684,7 +684,7 @@
           <div class="question-sub">วัดรอบน่องส่วนที่โตที่สุดด้วยนิ้วโป้งและชี้ทั้งสองข้างรอบน่อง</div>
           <div class="options-row" style="flex-direction: column;">
             <div class="option-pill">
-              <input type="radio" name="gs_sarcopenia" id="wakka_1" value="low">
+              <input type="radio" name="gs_sarcopenia" id="wakka_1" value="low" checked>
               <label for="wakka_1" style="justify-content: flex-start; text-align: left; padding-left: 14px;">
                 🟢 <strong>น่องใหญ่กว่าวงนิ้ว</strong> : ความเสี่ยงต่ำ
               </label>
@@ -704,9 +704,9 @@
           </div>
         </div>
 
-        <div class="question-item">
+        <div class="question-item" id="qitem_gs_adl">
           <div class="question-title">8. กิจวัตรประจำวันพื้นฐาน (Immobility: Barthel ADL) <span class="required">*</span></div>
-          <p class="question-sub">ประเมิน 10 กิจกรรมพื้นฐาน (คะแนนเต็ม 20 คะแนน)</p>
+          <p class="question-sub">ประเมิน 10 กิจกรรมพื้นฐาน (คะแนนเต็ม 20 คะแนน / ค่าเริ่มต้นตั้งเป็นทำได้เอง)</p>
           <div id="container-adl-questions"></div>
         </div>
       </div>
@@ -856,8 +856,7 @@
   </div>
 
   <script>
-    // Cloud URL สำหรับเชื่อมต่อ Apps Script
-    const HARDCODED_CLOUD_URL = "https://script.google.com/macros/s/AKfycbz9oXxa5sn1outQspTrd8d8kEA6osfZh5Skz4H5kaZKOnAz3cueSDxWcK1FYU_4Ug/exec";
+    const HARDCODED_CLOUD_URL = "https://script.google.com/macros/s/AKfycbwJOVtZ6IqVwO9wddKt_EIaakiD0mt7u7DjOK7LoDBLPx6bbDwEaQBoyCiqYxtMnAbVbg/exec";
     localStorage.setItem('salaya_cloud_api', HARDCODED_CLOUD_URL);
     const DEFAULT_CLOUD_ENDPOINT = HARDCODED_CLOUD_URL;
 
@@ -911,7 +910,6 @@
       { title: "10. การกลั้นปัสสาวะ (ในระยะ 1 สัปดาห์ที่ผ่านมา)", options: [{ label: "กลั้นได้ปกติ", score: 2 }, { label: "กลั้นไม่ได้บางครั้ง (< วันละ 1 ครั้ง)", score: 1 }, { label: "กลั้นไม่ได้", score: 0 }] }
     ];
 
-    // ตรวจจับสัญญาณอินเทอร์เน็ตกลับมาเพื่อ Sync คิวอัตโนมัติ
     window.addEventListener('online', () => {
       updateCloudIndicator(true, "เน็ตเชื่อมต่อแล้ว กำลังซิงค์ข้อมูล...");
       syncOfflineQueue();
@@ -921,7 +919,7 @@
       document.getElementById('pt-date').value = new Date().toISOString().split('T')[0];
       document.getElementById('cloud-api-url').value = DEFAULT_CLOUD_ENDPOINT;
 
-      // Render 9Q (ไม่เลือกค่า default เพื่อบังคับให้ตอบ)
+      // Render 9Q (Default: ไม่มีเลย 0)
       const container9Q = document.getElementById('container-9q-questions');
       questions9Q.forEach((q, idx) => {
         const div = document.createElement('div');
@@ -931,7 +929,7 @@
           <div class="question-title">${q} <span class="required">*</span></div>
           <div class="options-row">
             <div class="option-pill">
-              <input type="radio" name="q9_${idx}" id="q9_${idx}_0" value="0">
+              <input type="radio" name="q9_${idx}" id="q9_${idx}_0" value="0" checked>
               <label for="q9_${idx}_0">ไม่มีเลย (0)</label>
             </div>
             <div class="option-pill">
@@ -951,7 +949,7 @@
         container9Q.appendChild(div);
       });
 
-      // Render Dementia 14 (ไม่เลือกค่า default เพื่อบังคับให้ตอบ)
+      // Render Dementia 14 (Default: ไม่เคย/นานๆ ครั้ง 1)
       const containerDementia = document.getElementById('container-dementia-14');
       questionsDementia14.forEach((q, idx) => {
         const div = document.createElement('div');
@@ -961,7 +959,7 @@
           <div class="question-title">${q} <span class="required">*</span></div>
           <div class="options-row">
             <div class="option-pill">
-              <input type="radio" name="dementia_${idx}" id="dem_${idx}_1" value="1">
+              <input type="radio" name="dementia_${idx}" id="dem_${idx}_1" value="1" checked>
               <label for="dem_${idx}_1">ไม่เคย/นานๆ ครั้ง (1)</label>
             </div>
             <div class="option-pill">
@@ -981,7 +979,7 @@
         containerDementia.appendChild(div);
       });
 
-      // Render ADL (ไม่เลือกค่า default เพื่อบังคับให้ตอบ)
+      // Render ADL (Default: เลือกตัวเลือกแรก คือทำได้เอง/คะแนนเต็ม)
       const containerADL = document.getElementById('container-adl-questions');
       questionsADL.forEach((q, idx) => {
         const div = document.createElement('div');
@@ -989,9 +987,10 @@
         div.id = `qitem_adl_${idx}`;
         let optionsHtml = '';
         q.options.forEach((opt, oIdx) => {
+          const isDefault = oIdx === 0 ? 'checked' : '';
           optionsHtml += `
             <div class="option-pill" style="min-width: 100%; margin-bottom: 4px;">
-              <input type="radio" name="adl_${idx}" id="adl_${idx}_${oIdx}" value="${opt.score}">
+              <input type="radio" name="adl_${idx}" id="adl_${idx}_${oIdx}" value="${opt.score}" ${isDefault}>
               <label for="adl_${idx}_${oIdx}" style="justify-content: space-between; padding: 8px 14px;">
                 <span>${opt.label}</span>
                 <strong>${opt.score} คะแนน</strong>
@@ -1006,12 +1005,10 @@
         containerADL.appendChild(div);
       });
 
-      // ลองดึงข้อมูลและตรวจคิวค้างส่ง
       fetchCloudData();
       syncOfflineQueue();
     });
 
-    // 🔒 ระบบตรวจสอบรหัสผ่าน PIN 6 หลัก
     function authenticateAdmin() {
       const input = prompt("🔒 กรุณาใส่รหัสผ่านเจ้าหน้าที่ (PIN 6 หลัก):");
       if (input === null) return false;
@@ -1063,7 +1060,6 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // 3. ฟังก์ชันตรวจสอบความถูกต้องของฟอร์ม (Validation)
     function validateAssessmentForm() {
       const name = document.getElementById('pt-name').value.trim();
       const ageStr = document.getElementById('pt-age').value.trim();
@@ -1075,7 +1071,6 @@
         return false;
       }
 
-      // 4. เงื่อนไขตรวจสอบช่วงอายุ 50-110 ปี
       const age = parseInt(ageStr, 10);
       if (isNaN(age) || age < 50 || age > 110) {
         alert('⚠️ ข้อมูลอายุไม่ถูกต้อง!\nโครงการนี้สำหรับผู้สูงอายุในช่วงอายุ 50 ถึง 110 ปีเท่านั้น กรุณาตรวจสอบอีกครั้ง');
@@ -1089,7 +1084,6 @@
         return false;
       }
 
-      // ตรวจ 2Q
       const q2_1 = document.querySelector('input[name="q2_1"]:checked');
       const q2_2 = document.querySelector('input[name="q2_2"]:checked');
       if (!q2_1 || !q2_2) {
@@ -1098,7 +1092,6 @@
         return false;
       }
 
-      // ตรวจ 9Q (ถ้า 2Q ข้อใดข้อหนึ่งเป็น มี)
       if (q2_1.value === "1" || q2_2.value === "1") {
         for (let i = 0; i < 9; i++) {
           const check = document.querySelector(`input[name="q9_${i}"]:checked`);
@@ -1110,7 +1103,6 @@
         }
       }
 
-      // ตรวจสอบความจำ 14 ข้อ
       for (let i = 0; i < 14; i++) {
         const check = document.querySelector(`input[name="dementia_${i}"]:checked`);
         if (!check) {
@@ -1120,9 +1112,8 @@
         }
       }
 
-      // ตรวจสอบ Geriatric
       if (!document.querySelector('input[name="gs_inanition"]:checked')) {
-        alert('กรุณาเลือกคำตอบในข้อ 2. ภาวะทุพโภชนาการ (น้ำหนักลด/เบื่ออาหาร)');
+        alert('กรุณาเลือกคำตอบในข้อ 2. ภาวะทุพโภชนาการ');
         document.getElementById('qitem_gs_inanition').scrollIntoView({ behavior: 'smooth' });
         return false;
       }
@@ -1142,7 +1133,7 @@
         return false;
       }
       if (!document.querySelector('input[name="gs_isolation"]:checked')) {
-        alert('กรุณาเลือกคำตอบในข้อ 6. สภาพแวดล้อมทางสังคม (อยู่คนเดียว/เหงา)');
+        alert('กรุณาเลือกคำตอบในข้อ 6. สภาพแวดล้อมทางสังคม');
         document.getElementById('qitem_gs_isolation').scrollIntoView({ behavior: 'smooth' });
         return false;
       }
@@ -1152,7 +1143,6 @@
         return false;
       }
 
-      // ตรวจสอบ ADL 10 ข้อ
       for (let i = 0; i < 10; i++) {
         const check = document.querySelector(`input[name="adl_${i}"]:checked`);
         if (!check) {
@@ -1168,7 +1158,6 @@
     async function calculateAndShowSummary() {
       if (isSubmitting) return;
 
-      // ทำการ Validate ฟอร์ม
       if (!validateAssessmentForm()) {
         return;
       }
@@ -1263,7 +1252,10 @@
           adlTotal += val;
         }
         const raw_adl = raw_adl_arr.join(',');
-        let adlGroup = adlTotal >= 12 ? "กลุ่มที่ 1: ติดสังคม (≥12 แต้ม)" : (adlTotal >= 5 ? "กลุ่มที่ 2: ติดบ้าน (5-11 แต้ม)" : "กลุ่มที่ 3: ติดเตียง (≤4 แต้ม)");
+        let adlGroup = "";
+        if (adlTotal >= 12) adlGroup = "กลุ่มที่ 1: ติดสังคม (≥12 แต้ม)";
+        else if (adlTotal >= 5) adlGroup = "กลุ่มที่ 2: ติดบ้าน (5-11 แต้ม)";
+        else adlGroup = "กลุ่มที่ 3: ติดเตียง (≤4 แต้ม)";
 
         const isUpdate = !!editingRecordId;
         currentEvaluation = {
@@ -1278,19 +1270,19 @@
           isVisionAbnormal, raw_vision, isHearingAbnormal,
           isIsolationAbnormal, sarcopeniaVal, sarcopeniaText,
           adlTotal, adlGroup, raw_adl,
-          synced: false // ค่าเริ่มต้นสำหรับ Offline Queue
+          synced: false
         };
 
-        // 1. ปลดล็อกปุ่มและสถานะทันที
+        // ปลดล็อกสถานะปุ่มทันที
         isSubmitting = false;
         submitBtn.disabled = false;
         submitText.textContent = "ประมวลผล & บันทึกข้อมูล";
 
-        // 2. แสดงผลสรุปทันที
+        // แสดงผลสรุปและเปลี่ยนหน้าทันที
         displaySummary(currentEvaluation);
         switchView('summary-view');
 
-        // 3. ส่งขึ้น Cloud ทำงานเบื้องหลัง
+        // ส่งข้อมูลขึ้น Cloud เบื้องหลัง
         saveToCloud(currentEvaluation, isUpdate ? "UPDATE" : "CREATE");
 
       } catch (err) {
@@ -1301,7 +1293,6 @@
       }
     }
 
-    // 2. ฟังก์ชันบันทึกและระบบคิวออฟไลน์ (Auto-retry Sync)
     async function saveToCloud(record, action = "CREATE") {
       let local = JSON.parse(localStorage.getItem('salaya_records') || '[]');
       if (action === "UPDATE") {
@@ -1322,7 +1313,6 @@
             body: JSON.stringify({ action: action, ...record })
           });
           
-          // ทำเครื่องหมายว่าซิงค์เรียบร้อยแล้ว
           record.synced = true;
           local = local.map(r => r.id === record.id ? { ...r, synced: true } : r);
           localStorage.setItem('salaya_records', JSON.stringify(local));
@@ -1335,7 +1325,6 @@
       }
     }
 
-    // ฟังก์ชันดันข้อมูลค้างส่งขึ้น Cloud อัตโนมัติ
     async function syncOfflineQueue() {
       let local = JSON.parse(localStorage.getItem('salaya_records') || '[]');
       const pendingItems = local.filter(r => r.synced === false);
@@ -1408,7 +1397,6 @@
       document.getElementById('pt-date').value = data.date || '';
       document.getElementById('pt-assessor').value = data.assessor || '';
 
-      // คืนค่า 2Q
       if (data.raw_2q) {
         const parts = data.raw_2q.toString().split(',');
         if (parts[0]) {
@@ -1422,7 +1410,6 @@
       }
       handle2QChange();
 
-      // คืนค่า 9Q
       if (data.raw_9q) {
         const q9s = data.raw_9q.toString().split(',');
         q9s.forEach((val, idx) => {
@@ -1431,7 +1418,6 @@
         });
       }
 
-      // คืนค่า ความจำ 14 ข้อ
       if (data.raw_dem14) {
         const dems = data.raw_dem14.toString().split(',');
         dems.forEach((val, idx) => {
@@ -1440,7 +1426,6 @@
         });
       }
 
-      // คืนค่า Geriatric
       if (data.raw_instability) {
         const [i1, i2, i3] = data.raw_instability.toString().split(',');
         document.getElementById('instability_1').checked = i1 == 1;
@@ -1468,7 +1453,6 @@
       setRadio('gs_isolation', (data.isIsolationAbnormal === "ผิดปกติ" || data.isIsolationAbnormal == 1 || data.isIsolationAbnormal === true) ? 1 : 0);
       setRadio('gs_sarcopenia', data.sarcopeniaVal || 'low');
 
-      // คืนค่า ADL
       if (data.raw_adl) {
         const adls = data.raw_adl.toString().split(',');
         adls.forEach((val, idx) => {
@@ -1479,7 +1463,6 @@
     }
 
     async function deleteRecord(id, name) {
-      // 🔒 ตรวจสอบ PIN ก่อนลบข้อมูล
       if (!authenticateAdmin()) return;
 
       if (!confirm(`คุณต้องการลบข้อมูลการประเมินของ "${name}" ใช่หรือไม่?`)) {
@@ -1760,15 +1743,45 @@
 
       document.getElementById('pt-name').value = '';
       document.getElementById('pt-age').value = '';
-      
-      // ล้าง Radio ทุกอัน เพื่อให้บังคับเลือกใหม่
-      const allRadios = document.querySelectorAll('input[type="radio"]');
-      allRadios.forEach(r => r.checked = false);
+
+      // 1. คืนค่า 2Q เป็น ไม่มี (0)
+      document.getElementById('q2_1_no').checked = true;
+      document.getElementById('q2_2_no').checked = true;
       handle2QChange();
 
-      // ล้าง Checkbox
-      const allChecks = document.querySelectorAll('input[type="checkbox"]');
-      allChecks.forEach(c => c.checked = false);
+      // 2. คืนค่า 9Q เป็น ไม่มีเลย (0)
+      for (let i = 0; i < 9; i++) {
+        const el = document.getElementById(`q9_${i}_0`);
+        if (el) el.checked = true;
+      }
+
+      // 3. คืนค่า ความจำ 14 ข้อ เป็น ไม่เคย/นานๆ ครั้ง (1)
+      for (let i = 0; i < 14; i++) {
+        const el = document.getElementById(`dem_${i}_1`);
+        if (el) el.checked = true;
+      }
+
+      // 4. ล้าง Checkbox การทรงตัว และสายตา
+      document.getElementById('instability_1').checked = false;
+      document.getElementById('instability_2').checked = false;
+      document.getElementById('instability_3').checked = false;
+      document.getElementById('sensory_vision_1').checked = false;
+      document.getElementById('sensory_vision_2').checked = false;
+      document.getElementById('sensory_vision_3').checked = false;
+
+      // 5. คืนค่า Geriatric Syndromes เป็นปกติ
+      document.getElementById('ina_no').checked = true;
+      document.getElementById('uri_no').checked = true;
+      document.getElementById('sleep_no').checked = true;
+      document.getElementById('hear_normal').checked = true;
+      document.getElementById('iso_no').checked = true;
+      document.getElementById('wakka_1').checked = true;
+
+      // 6. คืนค่า ADL เป็นคะแนนเต็ม
+      for (let i = 0; i < 10; i++) {
+        const el = document.getElementById(`adl_${i}_0`);
+        if (el) el.checked = true;
+      }
 
       switchView('form-view');
     }
